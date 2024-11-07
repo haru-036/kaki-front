@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Header from "@/components/layout/Header";
 
 export const metadata: Metadata = {
   title: "イラスト版 GitHub",
@@ -12,8 +13,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ja">
-      <body>{children}</body>
+    <html lang="ja" className="dark">
+      <body>
+        <Header />
+        {children}
+      </body>
     </html>
   );
 }
