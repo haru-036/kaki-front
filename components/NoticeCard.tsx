@@ -18,7 +18,7 @@ const NoticeCard = () => {
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-sm">
+        <p className="text-sm font-normal">
           コメント内容コメント内容コメント内容コメント内容コメント内容コメント内容コメント内容コメント内容コメント内容コメント内容コメント内容
         </p>
         <div className="flex items-center pt-3">

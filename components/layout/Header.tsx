@@ -13,7 +13,7 @@ const Header = () => {
         </Link>
 
         {/* 一意のユーザー名をリンクにする */}
-        <Link href={`/user`}>
+        <Link href={`/1`}>
           <Avatar>
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>CN</AvatarFallback>
