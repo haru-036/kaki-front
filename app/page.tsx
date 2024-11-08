@@ -16,9 +16,10 @@ export default function Home() {
             />
             <Input className="pl-10" placeholder="プロジェクトを検索" />
           </div>
-          <ProjectCard />
-          <ProjectCard />
-          <ProjectCard />
+          <ProjectCard user={true} />
+          <ProjectCard user={true} />
+          <ProjectCard user={true} />
+          <ProjectCard user={true} />
         </div>
         <div className="font-semibold text-xl space-y-4 col-span-1">
           <h2>通知</h2>
