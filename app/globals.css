@@ -51,6 +51,7 @@ body {
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
+    --error: 0, 62%, 69%;
     --border: 0 0% 24%;
     --input: 0 0% 40%;
     --ring: 0 0% 83.1%;
