@@ -10,7 +10,7 @@ const Project = () => {
       <div className="flex justify-between items-center">
         <h2 className="font-semibold text-xl">Project名</h2>
         <Button asChild className="font-semibold" variant={"outline"}>
-          <Link href={"/newCommit"}>Add file</Link>
+          <Link href={"/1/projectId/addCommit"}>Add file</Link>
         </Button>
       </div>
 

@@ -1,14 +1,4 @@
 import { z } from "zod";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "./ui/form";
-import { formSchema } from "./CreateProjectForm";
-import { UseFormReturn } from "react-hook-form";
-import { Input } from "./ui/input";
 import { useState } from "react";
 import DropImageZone from "./DropImageZone";
 import { ImageUp } from "lucide-react";
@@ -19,11 +9,9 @@ export const commitSchema = z.object({
 });
 
 const AddCommitContent = ({
-  form,
-  init,
+  setFormValue,
 }: {
-  form: UseFormReturn<z.infer<typeof formSchema>>;
-  init: boolean;
+  setFormValue: (e: string) => void;
 }) => {
   const [image, setImage] = useState<string | null>(null);
 
@@ -35,7 +23,7 @@ const AddCommitContent = ({
       fileReader.onload = () => {
         const imageSrc: string = fileReader.result as string;
         setImage(imageSrc);
-        form.setValue("commitImage", imageSrc);
+        setFormValue(imageSrc);
       };
       fileReader.readAsDataURL(file);
     }
@@ -54,63 +42,34 @@ const AddCommitContent = ({
   };
 
   return (
-    <div>
-      <h3 className="text-lg font-semibold py-2">
-        {init ? "初回コミット" : "コミット"}
-      </h3>
-
-      <FormField
-        control={form.control}
-        name="commitImage"
-        render={() => (
-          <FormItem>
-            <div className="w-full flex items-center justify-center max-h-[400px]">
-              {image ? (
-                <img
-                  src={image}
-                  alt="画像のプレビュー"
-                  className="bg-foreground rounded-md block max-h-[400px]"
-                />
-              ) : (
-                <DropImageZone onDropFile={onDropFile}>
-                  <div className="flex flex-col items-center gap-3 text-center">
-                    <ImageUp size={32} className="opacity-70" />
-                    ここに画像をドラッグして追加するか
-                    <label
-                      htmlFor="image"
-                      className="cursor-pointer text-blue-400 hover:underline"
-                    >
-                      <input
-                        type="file"
-                        id="image"
-                        accept="image/*"
-                        onChange={onChange}
-                        className="hidden"
-                      />
-                      画像を選択してください
-                    </label>
-                  </div>
-                </DropImageZone>
-              )}
-            </div>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-      <FormField
-        control={form.control}
-        name="commitMessage"
-        render={({ field }) => (
-          <FormItem className="pt-6">
-            <FormLabel>コミットメッセージ</FormLabel>
-            <FormControl>
-              <Input {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+    <div className="w-full flex items-center justify-center max-h-[400px]">
+      {image ? (
+        <img
+          src={image}
+          alt="画像のプレビュー"
+          className="bg-foreground rounded-md block max-h-[400px]"
+        />
+      ) : (
+        <DropImageZone onDropFile={onDropFile}>
+          <div className="flex flex-col items-center gap-3 text-center">
+            <ImageUp size={32} className="opacity-70" />
+            ここに画像をドラッグして追加するか
+            <label
+              htmlFor="image"
+              className="cursor-pointer text-blue-400 hover:underline"
+            >
+              <input
+                type="file"
+                id="image"
+                accept="image/*"
+                onChange={onChange}
+                className="hidden"
+              />
+              画像を選択してください
+            </label>
+          </div>
+        </DropImageZone>
+      )}
     </div>
   );
 };
