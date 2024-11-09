@@ -11,7 +11,7 @@ import Link from "next/link";
 
 const ProjectCard = ({ user }: { user: boolean }) => {
   return (
-    <Link href={"/"} className="h-fit">
+    <Link href={"/username/project"} className="h-fit">
       <Card className="hover:bg-secondary">
         <CardHeader className="space-y-4 pb-4">
           {user && (
