@@ -76,7 +76,37 @@ const CreateProjectForm = () => {
               </FormItem>
             )}
           />
-          <AddCommitContent form={form} init />
+
+          <div>
+            <h3 className="text-lg font-semibold py-2">初回コミット</h3>
+            <FormField
+              control={form.control}
+              name="commitImage"
+              render={() => (
+                <FormItem>
+                  <AddCommitContent
+                    setFormValue={(img) => form.setValue("commitImage", img)}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="commitMessage"
+              render={({ field }) => (
+                <FormItem className="pt-6">
+                  <FormLabel>コミットメッセージ</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
           <Button
             type="submit"
             className="bg-green-700 text-primary font-semibold hover:bg-green-800"
