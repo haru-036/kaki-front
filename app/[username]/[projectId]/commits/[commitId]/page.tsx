@@ -5,14 +5,26 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
 
-const CommitDetail = () => {
+const CommitDetail = async ({
+  params,
+}: {
+  params: Promise<{ username: string; projectId: string }>;
+}) => {
+  const projectId = (await params).projectId;
+  const userName = (await params).username;
+
   return (
     <div className="container mx-auto py-10 px-8 max-w-screen-lg">
+      <Link href={`/${userName}/${projectId}`}>
+        <h3 className="pb-2 text-blue-400 hover:underline tracking-wide">
+          {projectId} /
+        </h3>
+      </Link>
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-lg font-semibold pb-2">コミットメッセージ</h2>
           <div className="flex gap-2 items-center">
-            <Link href={`/1`} className="flex gap-2 items-center">
+            <Link href={`/${userName}`} className="flex gap-2 items-center">
               <Avatar className="w-5 h-5">
                 <AvatarImage src="https://github.com/shadcn.png" />
                 <AvatarFallback>CN</AvatarFallback>
