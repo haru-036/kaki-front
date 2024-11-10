@@ -33,7 +33,7 @@ const Project = () => {
               <p>8888</p>
               <p>1days ago</p>
               <Link
-                href={"/"}
+                href={`/1/projectId/commits`}
                 className="text-primary flex items-center gap-0.5 px-2 py-1 hover:bg-muted rounded"
               >
                 <History size={16} />3 commits
