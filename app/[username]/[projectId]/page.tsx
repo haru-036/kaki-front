@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Eye, History, Tag } from "lucide-react";
+import { Eye, History, Tag, Users } from "lucide-react";
 import Link from "next/link";
 
 const Project = () => {
@@ -9,9 +9,16 @@ const Project = () => {
     <div className="container mx-auto py-10 px-8 max-w-screen-xl">
       <div className="flex justify-between items-center">
         <h2 className="font-semibold text-xl">Project名</h2>
-        <Button asChild className="font-semibold" variant={"outline"}>
-          <Link href={"/1/projectId/addCommit"}>Add file</Link>
-        </Button>
+        <div className="flex gap-3 items-center">
+          <Button variant="outline" size="icon" asChild>
+            <Link href={`/1/projectId/addMember`} className="[&_svg]:size-5">
+              <Users />
+            </Link>
+          </Button>
+          <Button asChild className="font-semibold" variant={"outline"}>
+            <Link href={"/1/projectId/addCommit"}>Add file</Link>
+          </Button>
+        </div>
       </div>
 
       <div className="flex gap-10 py-8">

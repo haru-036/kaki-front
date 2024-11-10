@@ -40,7 +40,7 @@ const CommitCard = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="p-4">
-          <Link href={`/username/projectId/commitId`}>
+          <Link href={`/username/projectId/commits/commitId`}>
             <div className="w-64 aspect-video bg-neutral-400 rounded-md"></div>
           </Link>
         </CardContent>
