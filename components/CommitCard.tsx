@@ -15,7 +15,7 @@ const CommitCard = () => {
         <CardHeader className="p-4">
           <CardTitle className="text-lg font-semibold">
             <Link
-              href={"/username/project/commitId"}
+              href={"/username/project/commits/commitId"}
               className="h-fit hover:underline"
             >
               コミットメッセージ
