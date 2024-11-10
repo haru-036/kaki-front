@@ -78,6 +78,33 @@ const Project = () => {
               <Badge>イラスト</Badge>
             </div>
           </div>
+
+          <div className="py-4 border-t border-border">
+            <h3 className="pb-3 flex items-center gap-2">
+              <Users size={16} />
+              Members
+            </h3>
+            <div className="flex gap-3 flex-wrap">
+              <Link href={`/1`}>
+                <Avatar>
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </Link>
+              <Link href={`/1`}>
+                <Avatar>
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </Link>
+              <Link href={`/1`}>
+                <Avatar>
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </div>
