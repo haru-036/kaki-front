@@ -1,7 +1,9 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
+import { Button } from "../ui/button";
 
 const Header = () => {
+  const user = true;
   return (
     <>
       <div className="flex items-center justify-between px-6 py-4 border-b">
@@ -13,12 +15,18 @@ const Header = () => {
         </Link>
 
         {/* 一意のユーザー名をリンクにする */}
-        <Link href={`/1`}>
-          <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-        </Link>
+        {user ? (
+          <Link href={`/1`}>
+            <Avatar>
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          </Link>
+        ) : (
+          <Button asChild>
+            <Link href={"/login"}>ログイン</Link>
+          </Button>
+        )}
       </div>
     </>
   );
