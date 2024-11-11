@@ -7,7 +7,7 @@ const CommitsWrapper = ({ children }: { children: React.ReactNode }) => {
         <GitCommit className="m-1" />
         Commits on Nov 7, 2024
       </div>
-      <div className="ml-4 border-l box-content border-input py-2 pl-5">
+      <div className="md:ml-4 md:border-l md:box-content md:border-input py-2 md:pl-5">
         <div className="border border-border rounded-lg divide-y">
           {children}
         </div>

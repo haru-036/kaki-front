@@ -1,4 +1,4 @@
-import AddCommitForm from "@/components/AddCommitForm";
+import AddCommitForm from "@/components/commit/AddCommitForm";
 import Link from "next/link";
 
 const AddCommit = async ({

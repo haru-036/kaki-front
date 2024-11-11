@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { useState } from "react";
-import DropImageZone from "./DropImageZone";
+import DropImageZone from "../DropImageZone";
 import { ImageUp } from "lucide-react";
 
 export const commitSchema = z.object({

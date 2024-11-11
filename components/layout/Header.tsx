@@ -23,7 +23,7 @@ const Header = () => {
             </Avatar>
           </Link>
         ) : (
-          <Button asChild>
+          <Button asChild variant={"ghost"}>
             <Link href={"/login"}>ログイン</Link>
           </Button>
         )}
