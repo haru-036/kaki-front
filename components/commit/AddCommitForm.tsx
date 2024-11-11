@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import AddCommitContent, { commitSchema } from "./AddCommitContent";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 
 const AddCommitForm = () => {
   const form = useForm<z.infer<typeof commitSchema>>({

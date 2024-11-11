@@ -5,15 +5,15 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "./ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+} from "../ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 const CommitCard = () => {
   return (
     <div>
-      <Card className="flex justify-between border-none">
+      <Card className="flex flex-col md:flex-row justify-between border-none">
         <CardHeader className="p-4">
-          <CardTitle className="text-lg font-semibold">
+          <CardTitle className="text-base md:text-lg font-semibold">
             <Link
               href={"/username/project/commits/commitId"}
               className="h-fit hover:underline"
@@ -36,12 +36,12 @@ const CommitCard = () => {
                 committed on December 7, 2021
               </div>
             </div>
-            <p className="text-muted-foreground">e659d0</p>
+            <p className="text-muted-foreground pt-2 md:pt-0">e659d0</p>
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-4">
+        <CardContent className="pt-0 px-4 pb-4 md:p-4">
           <Link href={`/username/projectId/commits/commitId`}>
-            <div className="w-64 aspect-video bg-neutral-400 rounded-md"></div>
+            <div className="w-full md:w-64 aspect-video bg-neutral-400 rounded-md"></div>
           </Link>
         </CardContent>
       </Card>

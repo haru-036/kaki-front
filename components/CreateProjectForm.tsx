@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "./ui/textarea";
-import AddCommitContent, { commitSchema } from "./AddCommitContent";
+import AddCommitContent, { commitSchema } from "./commit/AddCommitContent";
 
 const projectSchema = z.object({
   projectName: z

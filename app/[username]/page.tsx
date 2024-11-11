@@ -4,7 +4,13 @@ import { Button } from "@/components/ui/button";
 import { BookMarked } from "lucide-react";
 import Link from "next/link";
 
-const Profile = () => {
+const Profile = async ({
+  params,
+}: {
+  params: Promise<{ username: string }>;
+}) => {
+  const userName = (await params).username;
+
   return (
     <div className="container mx-auto py-10 px-8 max-w-screen-xl flex flex-col md:flex-row gap-8">
       <div className="flex md:flex-col items-center md:items-start gap-4 md:gap-0">
@@ -24,7 +30,7 @@ const Profile = () => {
             asChild
             className="bg-green-700 text-primary font-semibold hover:bg-green-800"
           >
-            <Link href={"/new"}>
+            <Link href={`/${userName}/new`}>
               <BookMarked />
               新規作成
             </Link>

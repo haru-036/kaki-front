@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const Project = () => {
   return (
-    <div className="container mx-auto py-10 px-8 max-w-screen-xl">
+    <div className="container mx-auto py-10 px-6 md:px-8 max-w-screen-xl">
       <div className="flex justify-between items-center">
         <h2 className="font-semibold text-xl">Project名</h2>
         <div className="flex gap-3 items-center">
@@ -21,9 +21,9 @@ const Project = () => {
         </div>
       </div>
 
-      <div className="flex gap-10 py-8">
-        <div className="w-3/4 border border-input rounded-md">
-          <div className="flex justify-between items-center bg-white bg-opacity-5 py-3 px-3 border-b border-input">
+      <div className="flex flex-col md:flex-row gap-10 py-8">
+        <div className="w-full md:w-3/4 border border-input rounded-md">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white bg-opacity-5 py-3 px-3 border-b border-input">
             <div className="flex gap-2 items-center">
               <Button asChild variant={"link"} size={"sm"} className="px-2">
                 <Link href={"/1"}>
@@ -36,7 +36,7 @@ const Project = () => {
               </Button>
               <p className="text-sm">コミットメッセージ</p>
             </div>
-            <div className="text-sm text-muted-foreground flex gap-4 items-center">
+            <div className="text-sm text-muted-foreground flex gap-4 items-center px-2 md:px-0">
               <p>8888</p>
               <p>1days ago</p>
               <Link
@@ -52,7 +52,7 @@ const Project = () => {
           </div>
         </div>
 
-        <div className="w-1/4">
+        <div className="w-full md:w-1/4">
           <div>
             <h3 className="font-semibold py-5 leading-snug">About</h3>
             <p className="leading-relaxed">
