@@ -1,11 +1,25 @@
+"use client";
 import ProjectCard from "@/components/ProjectCard";
 import { Input } from "@/components/ui/input";
 import { ChevronRight, Search } from "lucide-react";
 import NoticeCard from "@/components/NoticeCard";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+// import { useEffect } from "react";
+// import api from "@/lib/axios";
 
 export default function Home() {
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       const response = await api.get("/profile");
+  //       console.log("GETリクエストが成功しました", response.data);
+  //     } catch (error) {
+  //       console.error("GETリクエストが失敗しました", error);
+  //     }
+  //   })();
+  // }, []);
+
   const user = true;
   return (
     <div className="container mx-auto py-8">
@@ -14,12 +28,15 @@ export default function Home() {
           <h1 className="text-2xl md:text-4xl font-semibold">Home</h1>
           <div className="grid md:grid-cols-3 gap-20 py-10">
             <div className="flex flex-col gap-8 md:col-span-2">
-              <div className="relative">
+              <div className="relative flex gap-4">
                 <Search
                   size={20}
                   className="stroke-muted-foreground absolute m-2.5"
                 />
                 <Input className="pl-10" placeholder="プロジェクトを検索" />
+                <Button className="bg-green-700 text-primary font-semibold hover:bg-green-800">
+                  検索
+                </Button>
               </div>
               <ProjectCard user={true} />
               <ProjectCard user={true} />
