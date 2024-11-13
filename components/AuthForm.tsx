@@ -39,7 +39,7 @@ const signupSchema = baseSchema
   })
   .refine((data) => data.password === data.password2, {
     message: "パスワードが一致しません",
-    path: ["confirmPassword"], // confirmPasswordフィールドにエラーを表示
+    path: ["password2"], // confirmPasswordフィールドにエラーを表示
   });
 
 const AuthForm = ({ type }: { type: "login" | "signup" }) => {
