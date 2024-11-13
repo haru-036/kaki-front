@@ -12,7 +12,7 @@ export default function Home() {
   // useEffect(() => {
   //   (async () => {
   //     try {
-  //       const response = await api.get("/profile");
+  //       const response = await api.post("/");
   //       console.log("GETリクエストが成功しました", response.data);
   //     } catch (error) {
   //       console.error("GETリクエストが失敗しました", error);
@@ -25,8 +25,8 @@ export default function Home() {
     <div className="container mx-auto py-8">
       {user ? (
         <div className="px-6">
-          <h1 className="text-2xl md:text-4xl font-semibold">Home</h1>
-          <div className="grid md:grid-cols-3 gap-20 py-10">
+          <h1 className="text-xl md:text-3xl font-semibold">Dashboard</h1>
+          <div className="grid md:grid-cols-3 gap-8 xl:gap-20 py-10">
             <div className="flex flex-col gap-8 md:col-span-2">
               <div className="relative flex gap-4">
                 <Search

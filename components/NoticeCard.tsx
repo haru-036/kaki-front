@@ -5,17 +5,17 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 const NoticeCard = () => {
   return (
     <Card className="max-w-lg">
-      <CardHeader className="pb-4">
+      <CardHeader className="pb-4 space-y-0 flex flex-col xl:flex-row xl:items-center gap-2">
         <div className="flex items-center gap-2">
           <Avatar className="w-7 h-7">
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <h4 className="text-sm font-semibold">username</h4>
-          <p className="text-muted-foreground text-sm font-normal">
-            commented to プロジェクト名
-          </p>
         </div>
+        <p className="text-muted-foreground text-sm font-normal">
+          commented to プロジェクト名
+        </p>
       </CardHeader>
       <CardContent>
         <p className="text-sm font-normal">
