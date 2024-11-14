@@ -16,8 +16,14 @@ const ProjectCard = ({
   user: boolean;
   project: Project;
 }) => {
+  const format = (newDate: Date) => {
+    const date = new Date(newDate);
+    const formatDate = date.toLocaleString();
+    return formatDate;
+  };
+
   return (
-    <Link href={`/1/project`} className="h-fit">
+    <Link href={`/1/${project.id}`} className="h-fit">
       <Card className="hover:bg-secondary">
         <CardHeader className="space-y-4 pb-4">
           {user && (
@@ -26,7 +32,7 @@ const ProjectCard = ({
                 <AvatarImage src="https://github.com/shadcn.png" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
-              <p className="">username</p>
+              <p className="">{project.created_user}</p>
             </div>
           )}
           <CardTitle className="text-xl">{project.name}</CardTitle>
@@ -35,7 +41,7 @@ const ProjectCard = ({
         {/* タグを入れるならBadgeを使う <CardContent>タグ</CardContent> */}
         <CardFooter>
           <div className="text-xs text-muted-foreground">
-            Updated on December 7, 2021
+            created at {format(project.date_posted)}
           </div>
         </CardFooter>
       </Card>

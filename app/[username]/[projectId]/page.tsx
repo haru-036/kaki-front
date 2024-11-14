@@ -1,14 +1,46 @@
+"use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import api from "@/lib/axios";
+import { getToken } from "@/lib/token";
 import { Eye, History, Tag, Users } from "lucide-react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+
+type ProjectData = {
+  project_id: number;
+  name: string;
+  description: string;
+  is_public: boolean;
+  latest_commit_image: string;
+};
 
 const Project = () => {
+  const params = useParams();
+  const [project, setProject] = useState<ProjectData>();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = getToken();
+        if (!token) return;
+        const res = await api.get(`/project/${params.projectId}`, {
+          headers: { Authorization: "Bearer " + token },
+        });
+        console.log(res);
+        setProject(res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, [params]);
+
   return (
     <div className="container mx-auto py-10 px-6 md:px-8 max-w-screen-xl">
       <div className="flex justify-between items-center">
-        <h2 className="font-semibold text-xl">Project名</h2>
+        <h2 className="font-semibold text-xl">{project?.name}</h2>
         <div className="flex gap-3 items-center">
           <Button variant="outline" size="icon" asChild>
             <Link href={`/1/projectId/addMember`} className="[&_svg]:size-5">
@@ -47,17 +79,22 @@ const Project = () => {
               </Link>
             </div>
           </div>
-          <div className="w-full p-5">
-            <div className="aspect-video bg-neutral-300 w-full rounded"></div>
+          <div className="w-full p-5 relative">
+            {/* {project && (
+              <img
+                src={`http://127.0.0.1:5000/${project.latest_commit_image}`}
+                alt="コミット画像"
+                className="w-full"
+              />
+            )} */}
+            {/* <div className="aspect-video bg-neutral-300 w-full rounded"></div> */}
           </div>
         </div>
 
         <div className="w-full md:w-1/4">
           <div>
             <h3 className="font-semibold py-5 leading-snug">About</h3>
-            <p className="leading-relaxed">
-              概要テキスト概要テキスト概要テキスト概要テキスト概要テキスト概要テキスト概要テキスト概要テキスト概要テキスト概要テキスト概要テキスト概要テキスト概要テキスト概要テキスト
-            </p>
+            <p className="leading-relaxed">{project?.description}</p>
           </div>
 
           {/* ここから下は余力があれば */}

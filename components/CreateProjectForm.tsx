@@ -14,32 +14,60 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "./ui/textarea";
 import AddCommitContent, { commitSchema } from "./commit/AddCommitContent";
+import axios from "axios";
+import { getToken } from "@/lib/token";
+import api from "@/lib/axios";
+import { useRouter } from "next/navigation";
 
 const projectSchema = z.object({
-  projectName: z
+  project_name: z
     .string()
     .min(1, "プロジェクト名は必須です")
     .max(50, "プロジェクト名は50文字以内で記述してください"),
-  description: z.string().max(200),
+  project_description: z.string().max(200),
 });
 
 export const formSchema = projectSchema.merge(commitSchema);
 
-const CreateProjectForm = () => {
+const CreateProjectForm = ({ userId }: { userId: string }) => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      projectName: "",
-      description: "",
-      commitMessage: "",
-      commitImage: "",
+      project_name: "",
+      project_description: "",
+      commit_message: "",
+      commit_image: undefined,
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+    const formData = new FormData();
+    formData.append("project_name", values.project_name);
+    formData.append("project_description", values.project_description);
+    formData.append("tags", "aa,bb");
+    formData.append("commit_image", values.commit_image);
+    formData.append("commit_message", values.commit_message);
+
+    try {
+      const token = getToken();
+      if (!token) return;
+      const response = await api.post("/makeproject", formData, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+      console.log("POSTリクエストが成功しました", response.data);
+      router.push(`/${userId}/${response.data.project_id}`);
+    } catch (error) {
+      console.error("POSTリクエストが失敗しました", error);
+      if (axios.isAxiosError(error)) {
+        console.error(error.response?.data);
+      } else {
+        console.error("不明なエラー");
+      }
+    }
   }
 
   return (
@@ -48,7 +76,7 @@ const CreateProjectForm = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
-            name="projectName"
+            name="project_name"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>プロジェクト名</FormLabel>
@@ -61,7 +89,7 @@ const CreateProjectForm = () => {
           />
           <FormField
             control={form.control}
-            name="description"
+            name="project_description"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>概要</FormLabel>
@@ -81,11 +109,11 @@ const CreateProjectForm = () => {
             <h3 className="text-lg font-semibold py-2">初回コミット</h3>
             <FormField
               control={form.control}
-              name="commitImage"
+              name="commit_image"
               render={() => (
                 <FormItem>
                   <AddCommitContent
-                    setFormValue={(img) => form.setValue("commitImage", img)}
+                    setFormValue={(img) => form.setValue("commit_image", img)}
                   />
                   <FormMessage />
                 </FormItem>
@@ -94,7 +122,7 @@ const CreateProjectForm = () => {
 
             <FormField
               control={form.control}
-              name="commitMessage"
+              name="commit_message"
               render={({ field }) => (
                 <FormItem className="pt-6">
                   <FormLabel>コミットメッセージ</FormLabel>

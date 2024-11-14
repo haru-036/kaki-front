@@ -1,7 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import PathnameProvider from "../PathnameProvider";
 import NotificationPopover from "../NotificationPopover";
 
 const Header = () => {
@@ -16,7 +15,7 @@ const Header = () => {
               <AvatarFallback>LOGO</AvatarFallback>
             </Avatar>
           </Link>
-          {user && <PathnameProvider />}
+          {/* {user && <PathnameProvider />} */}
         </div>
 
         {/* 一意のユーザー名をリンクにする */}

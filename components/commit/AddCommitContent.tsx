@@ -4,14 +4,16 @@ import DropImageZone from "../DropImageZone";
 import { ImageUp } from "lucide-react";
 
 export const commitSchema = z.object({
-  commitMessage: z.string().min(1, "コミットメッセージは必須です").max(100),
-  commitImage: z.string().min(1, "画像は必須です"),
+  commit_message: z.string().min(1, "コミットメッセージは必須です").max(100),
+  commit_image: z.custom<File>().refine((file) => file, {
+    message: "画像ファイルの添付は必須です",
+  }),
 });
 
 const AddCommitContent = ({
   setFormValue,
 }: {
-  setFormValue: (e: string) => void;
+  setFormValue: (e: File) => void;
 }) => {
   const [image, setImage] = useState<string | null>(null);
 
@@ -19,13 +21,9 @@ const AddCommitContent = ({
     if (file.type.substring(0, 5) !== "image") {
       alert("画像ファイルでないものはアップロードできません！");
     } else {
-      const fileReader = new FileReader();
-      fileReader.onload = () => {
-        const imageSrc: string = fileReader.result as string;
-        setImage(imageSrc);
-        setFormValue(imageSrc);
-      };
-      fileReader.readAsDataURL(file);
+      setFormValue(file);
+      const img = URL.createObjectURL(file);
+      setImage(img);
     }
   };
 

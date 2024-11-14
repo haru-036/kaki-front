@@ -1,7 +1,8 @@
-// import ProjectCard from "@/components/ProjectCard";
+import ProjectCard from "@/components/ProjectCard";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-// import api from "@/lib/axios";
+import api from "@/lib/axios";
+import { Project } from "@/types";
 import { BookMarked } from "lucide-react";
 import Link from "next/link";
 
@@ -11,7 +12,9 @@ const Profile = async ({
   params: Promise<{ username: string }>;
 }) => {
   const userName = (await params).username;
-  // const profile = await api.get(`/profile/${userName}`);
+  const res = await api.get(`/profile/${userName}`);
+  const data = await res.data;
+  console.log(data);
 
   return (
     <div className="container mx-auto py-10 px-8 max-w-screen-xl flex flex-col md:flex-row gap-8">
@@ -21,7 +24,7 @@ const Profile = async ({
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <div className="py-4">
-          <h2 className="font-semibold text-2xl">username</h2>
+          <h2 className="font-semibold text-2xl">{data.username}</h2>
         </div>
       </div>
       <div className="space-y-2 w-full">
@@ -39,14 +42,9 @@ const Profile = async ({
           </Button>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {/* <ProjectCard user={false} />
-          <ProjectCard user={false} />
-          <ProjectCard user={false} />
-          <ProjectCard user={false} />
-          <ProjectCard user={false} />
-          <ProjectCard user={false} />
-          <ProjectCard user={false} />
-          <ProjectCard user={false} /> */}
+          {data.projects.reverse().map((project: Project) => (
+            <ProjectCard user={false} project={project} key={project.id} />
+          ))}
         </div>
       </div>
     </div>

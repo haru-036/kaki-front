@@ -14,6 +14,7 @@ export default function Home() {
   const [data, setData] = useState<{
     projects: Project[];
     notifications: Notification[];
+    user_id: number;
   }>();
   useEffect(() => {
     (async () => {

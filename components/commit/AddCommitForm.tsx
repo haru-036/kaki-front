@@ -18,8 +18,8 @@ const AddCommitForm = () => {
   const form = useForm<z.infer<typeof commitSchema>>({
     resolver: zodResolver(commitSchema),
     defaultValues: {
-      commitMessage: "",
-      commitImage: "",
+      commit_message: "",
+      commit_image: undefined,
     },
   });
 
@@ -34,11 +34,11 @@ const AddCommitForm = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
-            name="commitImage"
+            name="commit_image"
             render={() => (
               <FormItem>
                 <AddCommitContent
-                  setFormValue={(img) => form.setValue("commitImage", img)}
+                  setFormValue={(img) => form.setValue("commit_image", img)}
                 />
                 <FormMessage />
               </FormItem>
@@ -47,7 +47,7 @@ const AddCommitForm = () => {
 
           <FormField
             control={form.control}
-            name="commitMessage"
+            name="commit_message"
             render={({ field }) => (
               <FormItem className="pt-6">
                 <FormLabel>コミットメッセージ</FormLabel>
