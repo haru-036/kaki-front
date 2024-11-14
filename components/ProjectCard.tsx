@@ -7,8 +7,15 @@ import {
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
+import { Project } from "@/types";
 
-const ProjectCard = ({ user }: { user: boolean }) => {
+const ProjectCard = ({
+  user,
+  project,
+}: {
+  user: boolean;
+  project: Project;
+}) => {
   return (
     <Link href={`/1/project`} className="h-fit">
       <Card className="hover:bg-secondary">
@@ -22,10 +29,8 @@ const ProjectCard = ({ user }: { user: boolean }) => {
               <p className="">username</p>
             </div>
           )}
-          <CardTitle className="text-xl">project名</CardTitle>
-          <CardDescription>
-            概要テキスト概要テキスト概要テキスト概要テキスト概要テキスト概要テキスト概要テキスト
-          </CardDescription>
+          <CardTitle className="text-xl">{project.name}</CardTitle>
+          <CardDescription>{project.description}</CardDescription>
         </CardHeader>
         {/* タグを入れるならBadgeを使う <CardContent>タグ</CardContent> */}
         <CardFooter>

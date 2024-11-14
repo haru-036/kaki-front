@@ -1,6 +1,7 @@
-import ProjectCard from "@/components/ProjectCard";
+// import ProjectCard from "@/components/ProjectCard";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+// import api from "@/lib/axios";
 import { BookMarked } from "lucide-react";
 import Link from "next/link";
 
@@ -10,6 +11,7 @@ const Profile = async ({
   params: Promise<{ username: string }>;
 }) => {
   const userName = (await params).username;
+  // const profile = await api.get(`/profile/${userName}`);
 
   return (
     <div className="container mx-auto py-10 px-8 max-w-screen-xl flex flex-col md:flex-row gap-8">
@@ -22,7 +24,7 @@ const Profile = async ({
           <h2 className="font-semibold text-2xl">username</h2>
         </div>
       </div>
-      <div className="space-y-2">
+      <div className="space-y-2 w-full">
         <div className="flex justify-between items-end">
           <h3 className="text-lg">プロジェクト一覧</h3>
           <Button
@@ -37,14 +39,14 @@ const Profile = async ({
           </Button>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* <ProjectCard user={false} />
           <ProjectCard user={false} />
           <ProjectCard user={false} />
           <ProjectCard user={false} />
           <ProjectCard user={false} />
           <ProjectCard user={false} />
           <ProjectCard user={false} />
-          <ProjectCard user={false} />
-          <ProjectCard user={false} />
+          <ProjectCard user={false} /> */}
         </div>
       </div>
     </div>

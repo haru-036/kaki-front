@@ -2,23 +2,34 @@
 import ProjectCard from "@/components/ProjectCard";
 import { Input } from "@/components/ui/input";
 import { ChevronRight, Search } from "lucide-react";
-import NoticeCard from "@/components/NoticeCard";
+import NotificationCard from "@/components/NotificationCard";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-// import { useEffect } from "react";
-// import api from "@/lib/axios";
+import { useEffect, useState } from "react";
+import api from "@/lib/axios";
+import { getToken } from "@/lib/token";
+import { Notification, Project } from "@/types";
 
 export default function Home() {
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       const response = await api.post("/");
-  //       console.log("GETリクエストが成功しました", response.data);
-  //     } catch (error) {
-  //       console.error("GETリクエストが失敗しました", error);
-  //     }
-  //   })();
-  // }, []);
+  const [data, setData] = useState<{
+    projects: Project[];
+    notifications: Notification[];
+  }>();
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = getToken();
+        if (!token) return;
+        const response = await api.get("/", {
+          headers: { Authorization: "Bearer " + token },
+        });
+        console.log("GETリクエストが成功しました", response.data);
+        setData(response.data);
+      } catch (error) {
+        console.error("GETリクエストが失敗しました", error);
+      }
+    })();
+  }, []);
 
   const user = true;
   return (
@@ -38,17 +49,18 @@ export default function Home() {
                   検索
                 </Button>
               </div>
-              <ProjectCard user={true} />
-              <ProjectCard user={true} />
-              <ProjectCard user={true} />
-              <ProjectCard user={true} />
+              {data?.projects.map((project) => (
+                <ProjectCard user={true} project={project} key={project.id} />
+              ))}
             </div>
             <div className="font-semibold text-xl space-y-4 md:col-span-1">
               <h2>通知</h2>
-              <NoticeCard />
-              <NoticeCard />
-              <NoticeCard />
-              <NoticeCard />
+              {data?.notifications.map((notification) => (
+                <NotificationCard
+                  key={notification.id}
+                  notification={notification}
+                />
+              ))}
             </div>
           </div>
         </div>

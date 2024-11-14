@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import PathnameProvider from "../PathnameProvider";
+import NotificationPopover from "../NotificationPopover";
 
 const Header = () => {
   const user = true;
@@ -20,12 +21,15 @@ const Header = () => {
 
         {/* 一意のユーザー名をリンクにする */}
         {user ? (
-          <Link href={`/1`}>
-            <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-          </Link>
+          <div className="flex items-center gap-6">
+            <NotificationPopover />
+            <Link href={`/1`}>
+              <Avatar>
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+            </Link>
+          </div>
         ) : (
           <Button asChild variant={"ghost"} className="font-medium">
             <Link href={"/login"}>Login</Link>

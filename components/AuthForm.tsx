@@ -19,6 +19,7 @@ import api from "@/lib/axios";
 import { useRouter } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import axios from "axios";
+import { setToken } from "@/lib/token";
 
 // 共通のベーススキーマ
 const baseSchema = z.object({
@@ -70,6 +71,7 @@ const AuthForm = ({ type }: { type: "login" | "signup" }) => {
         values
       );
       console.log("POSTリクエストが成功しました", response.data);
+      setToken(response.data.token);
       rounter.push(`/`);
     } catch (error) {
       console.error("POSTリクエストが失敗しました", error);
