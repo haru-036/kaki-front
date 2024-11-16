@@ -2,21 +2,25 @@
 import api from "@/lib/axios";
 import { getToken, removeToken } from "@/lib/token";
 import { User } from "@/types";
+import { useRouter } from "next/navigation";
 import { createContext, ReactNode, useEffect, useState } from "react";
 
 interface AuthContextType {
   user: User | null;
   logout: () => void;
+  updateUser: (userData: React.SetStateAction<User | null>) => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   logout: () => {},
+  updateUser: () => {},
 });
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -48,13 +52,14 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     })();
   }, []);
 
-  // const login = (userData: SetStateAction<null>) => {
-  //   setUser(userData);
-  // };
+  const updateUser = (userData: React.SetStateAction<User | null>) => {
+    setUser(userData);
+  };
 
   const logout = () => {
     setUser(null);
     removeToken();
+    router.push("/login");
   };
 
   if (isLoading) {
@@ -64,7 +69,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, logout }}>
+    <AuthContext.Provider value={{ user, updateUser, logout }}>
       {children}
     </AuthContext.Provider>
   );

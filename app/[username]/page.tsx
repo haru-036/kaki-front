@@ -1,12 +1,21 @@
 "use client";
 import { AuthContext } from "@/components/AuthProvider";
 import ProjectCard from "@/components/ProjectCard";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import UserIcon from "@/components/UserIcon";
 import api from "@/lib/axios";
 import { getToken } from "@/lib/token";
-import { Project } from "@/types";
-import { BookMarked } from "lucide-react";
+import { Project, User } from "@/types";
+import { BookMarked, Pencil } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
@@ -21,10 +30,15 @@ type ProfileData = {
 const Profile = () => {
   const params = useParams();
   const [data, setData] = useState<ProfileData | null>(null);
-  const { user, logout } = useContext(AuthContext);
+  const [inputFile, setInputFile] = useState<File>();
+  const { user, logout, updateUser } = useContext(AuthContext);
+  const [openModal, setOpenModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(true);
 
   useEffect(() => {
     (async () => {
+      if (!refreshKey) return;
       try {
         const token = getToken();
         const res = await api.get(
@@ -39,17 +53,46 @@ const Profile = () => {
         );
         setData(res.data);
         console.log(res.data);
+        if (user && user.user_id === res.data.user_id) {
+          updateUser({ ...user, profile_image: res.data.profile_image });
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setRefreshKey(false);
       }
     })();
-  }, [params]);
+  }, [params, refreshKey]);
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     const result = confirm("ログアウトしますか？");
     if (result) {
       logout();
       console.log("ログアウトしました");
+    }
+  };
+
+  const handleEditUserImg = async () => {
+    if (isLoading) return;
+    const token = getToken();
+    if (!token || data?.user_id !== user?.user_id || !inputFile) return;
+
+    setIsLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("profile_image", inputFile);
+      const res = await api.post(`/profile/${params.username}`, formData, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+      console.log(res.data);
+      setOpenModal(false);
+      setRefreshKey(true);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -58,14 +101,62 @@ const Profile = () => {
       {data ? (
         <>
           <div className="flex md:flex-col items-center md:items-start gap-4 md:gap-0">
-            <Avatar className="w-24 h-24 md:w-64 md:h-64 lg:w-72 lg:h-72">
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
+            <div className="relative">
+              <UserIcon
+                src={data.profile_image}
+                username={data.username}
+                className="w-24 h-24 md:w-64 md:h-64 lg:w-72 lg:h-72"
+              />
+              {user && user.user_id === data.user_id && (
+                <Dialog open={openModal} onOpenChange={setOpenModal}>
+                  <DialogTrigger asChild>
+                    <Button
+                      size={"sm"}
+                      variant={"outline"}
+                      className="absolute left-0 bottom-3"
+                    >
+                      <Pencil />
+                      Edit
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>プロフィール画像を編集</DialogTitle>
+                    </DialogHeader>
+                    <div className="py-4">
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={(
+                          event: React.ChangeEvent<HTMLInputElement>
+                        ) => {
+                          const files = event.currentTarget.files;
+                          // ファイルがなければ終了
+                          if (!files || files?.length === 0) return;
+                          // 先頭のファイルを取得
+                          const file = files[0];
+                          setInputFile(file);
+                        }}
+                      />
+                    </div>
+                    <DialogFooter>
+                      <Button
+                        type="submit"
+                        size={"sm"}
+                        onClick={handleEditUserImg}
+                        disabled={isLoading}
+                      >
+                        変更
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              )}
+            </div>
             <div className="py-4">
               <h2 className="font-semibold text-2xl">{data.username}</h2>
             </div>
-            {user && (
+            {user && user.user_id === data.user_id && (
               <Button
                 variant={"secondary"}
                 onClick={handleLogout}
@@ -92,7 +183,7 @@ const Profile = () => {
               )}
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {data.projects.reverse().map((project) => (
+              {[...data.projects].reverse().map((project) => (
                 <ProjectCard user={false} project={project} key={project.id} />
               ))}
             </div>

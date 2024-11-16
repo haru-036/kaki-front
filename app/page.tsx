@@ -15,21 +15,30 @@ export default function Home() {
     notifications: Notification[];
     user_id: number;
   }>();
+  const [searchInput, setSearchInput] = useState("");
+
   useEffect(() => {
-    (async () => {
-      try {
-        const token = getToken();
-        if (!token) return;
-        const response = await api.get("/", {
-          headers: { Authorization: "Bearer " + token },
-        });
-        console.log("GETリクエストが成功しました", response.data);
-        setData(response.data);
-      } catch (error) {
-        console.error("GETリクエストが失敗しました", error);
-      }
-    })();
+    fetchContent();
   }, []);
+
+  const fetchContent = async () => {
+    try {
+      const token = getToken();
+      if (!token) return;
+      const response = await api.get(
+        `/?search=${searchInput}`,
+        token
+          ? {
+              headers: { Authorization: "Bearer " + token },
+            }
+          : {}
+      );
+      console.log("GETリクエストが成功しました", response.data);
+      setData(response.data);
+    } catch (error) {
+      console.error("GETリクエストが失敗しました", error);
+    }
+  };
 
   return (
     <div
@@ -45,19 +54,42 @@ export default function Home() {
           } gap-8 xl:gap-20 py-10`}
         >
           <div className="flex flex-col gap-8 md:col-span-2">
-            <div className="relative flex gap-4">
+            <div className="relative flex gap-4 items-center">
               <Search
                 size={20}
                 className="stroke-muted-foreground absolute m-2.5"
               />
-              <Input className="pl-10" placeholder="プロジェクトを検索" />
-              <Button className="bg-green-700 text-primary font-semibold hover:bg-green-800">
-                検索
-              </Button>
+              <Input
+                className="pl-10"
+                placeholder="プロジェクトを検索"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+              />
+              <div className="flex items-center">
+                <Button
+                  onClick={fetchContent}
+                  className="bg-green-700 text-primary font-semibold hover:bg-green-800"
+                >
+                  検索
+                </Button>
+                <Button
+                  variant={"link"}
+                  size={"sm"}
+                  className="text-muted-foreground"
+                  onClick={() => {
+                    setSearchInput(""), fetchContent();
+                  }}
+                >
+                  クリア
+                </Button>
+              </div>
             </div>
-            {data?.projects.map((project) => (
-              <ProjectCard user={true} project={project} key={project.id} />
-            ))}
+            {data &&
+              [...data.projects]
+                .reverse()
+                .map((project) => (
+                  <ProjectCard user={true} project={project} key={project.id} />
+                ))}
           </div>
           {data?.user_id && (
             <div className="font-semibold text-xl space-y-4 md:col-span-1">
@@ -67,7 +99,7 @@ export default function Home() {
                   通知はありません
                 </div>
               )}
-              {data.notifications.map((notification) => (
+              {[...data.notifications].reverse().map((notification) => (
                 <NotificationCard
                   key={notification.id}
                   notification={notification}

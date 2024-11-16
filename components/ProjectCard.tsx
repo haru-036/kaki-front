@@ -5,9 +5,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
 import { Project } from "@/types";
+import UserIcon from "./UserIcon";
 
 const ProjectCard = ({
   user,
@@ -18,8 +18,9 @@ const ProjectCard = ({
 }) => {
   const format = (newDate: Date) => {
     const date = new Date(newDate);
-    const formatDate = date.toLocaleString();
-    return formatDate;
+    const formatDate = date.toISOString().split("T")[0];
+    const formatTime = date.toISOString().split("T")[1].substring(0, 5);
+    return `${formatDate} ${formatTime}`;
   };
 
   return (
@@ -28,11 +29,12 @@ const ProjectCard = ({
         <CardHeader className="space-y-4 pb-4">
           {user && (
             <div className="flex gap-2 items-center">
-              <Avatar className="w-7 h-7">
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-              <p className="">{project.created_user}</p>
+              <UserIcon
+                username={project.created_username}
+                src={project.created_user_profile_image}
+                className="w-7 h-7"
+              />
+              <p className="">{project.created_username}</p>
             </div>
           )}
           <CardTitle className="text-xl">{project.name}</CardTitle>
@@ -41,7 +43,7 @@ const ProjectCard = ({
         {/* タグを入れるならBadgeを使う <CardContent>タグ</CardContent> */}
         <CardFooter>
           <div className="text-xs text-muted-foreground">
-            created at {format(project.created_at)}
+            created at {project.created_at && format(project.created_at)}
           </div>
         </CardFooter>
       </Card>

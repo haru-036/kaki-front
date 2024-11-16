@@ -20,7 +20,7 @@ const CommitCard = ({
 }) => {
   const format = (newDate: Date) => {
     const date = new Date(newDate);
-    const formatDate = date.toISOString().split("T")[1].substring(0, 8);
+    const formatDate = date.toISOString().split("T")[1].substring(0, 5);
     return formatDate;
   };
 
