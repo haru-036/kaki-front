@@ -126,7 +126,7 @@ const Project = () => {
               <p>8888</p>
               <p>1days ago</p>
               <Link
-                href={`/1/projectId/commits`}
+                href={`/${params.username}/${params.projectId}/commits`}
                 className="text-primary flex items-center gap-0.5 px-2 py-1 hover:bg-muted rounded"
               >
                 <History size={16} />3 commits
@@ -134,13 +134,13 @@ const Project = () => {
             </div>
           </div>
           <div className="w-full p-5 relative">
-            {/* {project && (
+            {project && (
               <img
-                src={`http://127.0.0.1:5000/${project.latest_commit_image}`}
+                src={`data:image/png;base64,${project.latest_commit_image}`}
                 alt="コミット画像"
-                className="w-full"
+                className="w-full block"
               />
-            )} */}
+            )}
             {/* <div className="aspect-video bg-neutral-300 w-full rounded"></div> */}
           </div>
         </div>
