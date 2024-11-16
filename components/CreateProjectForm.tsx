@@ -18,19 +18,22 @@ import axios from "axios";
 import { getToken } from "@/lib/token";
 import api from "@/lib/axios";
 import { useRouter } from "next/navigation";
+import { useContext, useEffect } from "react";
+import { AuthContext } from "./AuthProvider";
 
 const projectSchema = z.object({
   project_name: z
     .string()
     .min(1, "プロジェクト名は必須です")
     .max(50, "プロジェクト名は50文字以内で記述してください"),
-  project_description: z.string().max(200),
+  project_description: z.string().min(1, "概要は必須です").max(200),
 });
 
 export const formSchema = projectSchema.merge(commitSchema);
 
 const CreateProjectForm = ({ userId }: { userId: string }) => {
   const router = useRouter();
+  const { user } = useContext(AuthContext);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,12 +44,19 @@ const CreateProjectForm = ({ userId }: { userId: string }) => {
     },
   });
 
+  useEffect(() => {
+    if (!user) {
+      router.replace("/login");
+      return;
+    }
+  }, [user, router]);
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
     const formData = new FormData();
     formData.append("project_name", values.project_name);
     formData.append("project_description", values.project_description);
-    formData.append("tags", "aa,bb");
+    formData.append("tags", "");
     formData.append("commit_image", values.commit_image);
     formData.append("commit_message", values.commit_message);
 
@@ -69,6 +79,8 @@ const CreateProjectForm = ({ userId }: { userId: string }) => {
       }
     }
   }
+
+  if (!user) return null;
 
   return (
     <div className="py-8 tracking-wide">

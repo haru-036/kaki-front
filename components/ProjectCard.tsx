@@ -41,7 +41,7 @@ const ProjectCard = ({
         {/* タグを入れるならBadgeを使う <CardContent>タグ</CardContent> */}
         <CardFooter>
           <div className="text-xs text-muted-foreground">
-            created at {format(project.date_posted)}
+            created at {format(project.created_at)}
           </div>
         </CardFooter>
       </Card>

@@ -13,8 +13,14 @@ import {
 } from "@/components/ui/form";
 import AddCommitContent, { commitSchema } from "./AddCommitContent";
 import { Input } from "../ui/input";
+import { useContext, useEffect } from "react";
+import { AuthContext } from "../AuthProvider";
+import { useRouter } from "next/navigation";
 
 const AddCommitForm = () => {
+  const router = useRouter();
+  const { user } = useContext(AuthContext);
+
   const form = useForm<z.infer<typeof commitSchema>>({
     resolver: zodResolver(commitSchema),
     defaultValues: {
@@ -23,11 +29,21 @@ const AddCommitForm = () => {
     },
   });
 
+  useEffect(() => {
+    if (!user) {
+      router.replace("/login");
+      return;
+    }
+  }, [user, router]);
+
   function onSubmit(values: z.infer<typeof commitSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
   }
+
+  if (!user) return null;
+
   return (
     <div className="py-8 tracking-wide">
       <Form {...form}>

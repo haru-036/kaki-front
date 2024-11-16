@@ -1,10 +1,13 @@
+"use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import NotificationPopover from "../NotificationPopover";
+import { useContext } from "react";
+import { AuthContext } from "../AuthProvider";
 
 const Header = () => {
-  const user = true;
+  const { user } = useContext(AuthContext);
   return (
     <header>
       <div className="flex items-center justify-between px-6 py-4 border-b">
@@ -22,15 +25,15 @@ const Header = () => {
         {user ? (
           <div className="flex items-center gap-6">
             <NotificationPopover />
-            <Link href={`/1`}>
+            <Link href={`/${user.user_id}`}>
               <Avatar>
                 <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarFallback>{user.username.slice(0, 2)}</AvatarFallback>
               </Avatar>
             </Link>
           </div>
         ) : (
-          <Button asChild variant={"ghost"} className="font-medium">
+          <Button asChild variant={"outline"} className="font-medium">
             <Link href={"/login"}>Login</Link>
           </Button>
         )}

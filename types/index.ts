@@ -1,13 +1,21 @@
 export type Project = {
   id: number;
   name: string;
-  description: string;
   created_user: number;
-  date_posted: Date;
+  latest_commit_image: string;
+  description: string;
+  created_at: Date;
 };
 
 export type Notification = {
   id: number;
   type: string;
   created_at: Date;
+  message: string;
+};
+
+export type User = {
+  username: string;
+  user_id: number;
+  profile_image: string;
 };
