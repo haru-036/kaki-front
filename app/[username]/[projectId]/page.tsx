@@ -83,17 +83,25 @@ const Project = () => {
         {user && (
           <div className="flex gap-3 items-center">
             <Button variant="outline" size="icon" asChild>
-              <Link href={`/1/1/settings`} className="[&_svg]:size-5">
+              <Link
+                href={`/${params.username}/${params.projectId}/settings`}
+                className="[&_svg]:size-5"
+              >
                 <Settings />
               </Link>
             </Button>
             <Button variant="outline" size="icon" asChild>
-              <Link href={`/1/projectId/addMember`} className="[&_svg]:size-5">
+              <Link
+                href={`/${params.username}/${params.projectId}/addMember`}
+                className="[&_svg]:size-5"
+              >
                 <Users />
               </Link>
             </Button>
             <Button asChild className="font-semibold" variant={"outline"}>
-              <Link href={"/1/projectId/addCommit"}>Add file</Link>
+              <Link href={`/${params.username}/${params.projectId}/addCommit`}>
+                Add file
+              </Link>
             </Button>
           </div>
         )}

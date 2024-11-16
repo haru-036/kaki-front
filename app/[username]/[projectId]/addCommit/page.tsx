@@ -17,7 +17,7 @@ const AddCommit = async ({
           {projectId} /
         </h3>
       </Link>
-      <AddCommitForm />
+      <AddCommitForm userId={userName} projectId={projectId} />
     </div>
   );
 };

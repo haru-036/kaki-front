@@ -16,8 +16,17 @@ import { Input } from "../ui/input";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "../AuthProvider";
 import { useRouter } from "next/navigation";
+import { getToken } from "@/lib/token";
+import api from "@/lib/axios";
+import axios from "axios";
 
-const AddCommitForm = () => {
+const AddCommitForm = ({
+  userId,
+  projectId,
+}: {
+  userId: string;
+  projectId: string;
+}) => {
   const router = useRouter();
   const { user } = useContext(AuthContext);
 
@@ -36,10 +45,34 @@ const AddCommitForm = () => {
     }
   }, [user, router]);
 
-  function onSubmit(values: z.infer<typeof commitSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+  async function onSubmit(values: z.infer<typeof commitSchema>) {
     console.log(values);
+    const formData = new FormData();
+    formData.append("commit_image", values.commit_image);
+    formData.append("commit_message", values.commit_message);
+
+    try {
+      const token = getToken();
+      if (!token) return;
+      const response = await api.post(
+        `/project/${projectId}/commit`,
+        formData,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      console.log("POSTリクエストが成功しました", response.data);
+      router.push(`/${userId}/${projectId}/`);
+    } catch (error) {
+      console.error("POSTリクエストが失敗しました", error);
+      if (axios.isAxiosError(error)) {
+        console.error(error.response?.data);
+      } else {
+        console.error("不明なエラー");
+      }
+    }
   }
 
   if (!user) return null;
