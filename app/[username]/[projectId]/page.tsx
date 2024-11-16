@@ -1,12 +1,11 @@
 "use client";
 import { AuthContext } from "@/components/AuthProvider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import api from "@/lib/axios";
 import { getToken } from "@/lib/token";
 import { User } from "@/types";
-import { Eye, History, Settings, Tag, Users } from "lucide-react";
+import { History, Settings, Users } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
@@ -17,8 +16,11 @@ type ProjectData = {
   description: string;
   is_public: boolean;
   latest_commit_image: string;
+  latest_commit_message: string;
   created_user: number;
   project_member: User[];
+  commit_count: number;
+  project_star_count: number;
 };
 
 const Project = () => {
@@ -50,7 +52,9 @@ const Project = () => {
 
   const handlePublic = async () => {
     if (!params.username || !params.projectId) return;
-    const result = confirm("プロジェクトを公開しますか？");
+    const result = confirm(
+      `プロジェクトを${project?.is_public ? "非公開" : "公開"}にしますか？`
+    );
     if (result) {
       try {
         const token = getToken();
@@ -120,7 +124,7 @@ const Project = () => {
                   <p className="font-semibold text-sm">username</p>
                 </Link>
               </Button>
-              <p className="text-sm">コミットメッセージ</p>
+              <p className="text-sm">{project?.latest_commit_message}</p>
             </div>
             <div className="text-sm text-muted-foreground flex gap-4 items-center px-2 md:px-0">
               <p>8888</p>
@@ -129,7 +133,8 @@ const Project = () => {
                 href={`/${params.username}/${params.projectId}/commits`}
                 className="text-primary flex items-center gap-0.5 px-2 py-1 hover:bg-muted rounded"
               >
-                <History size={16} />3 commits
+                <History size={16} />
+                {project?.commit_count} commits
               </Link>
             </div>
           </div>
@@ -138,23 +143,22 @@ const Project = () => {
               <img
                 src={`data:image/png;base64,${project.latest_commit_image}`}
                 alt="コミット画像"
-                className="w-full block"
+                className="w-full block object-contain max-h-[700px]"
               />
             )}
-            {/* <div className="aspect-video bg-neutral-300 w-full rounded"></div> */}
           </div>
         </div>
 
         <div className="w-full md:w-1/4">
           <div>
             <h3 className="font-semibold py-5 leading-snug">About</h3>
-            <p className="leading-relaxed">{project?.description}</p>
+            <p className="leading-relaxed pb-4">{project?.description}</p>
           </div>
-          <div className="text-muted-foreground flex gap-2 text-sm items-center py-4">
+          {/* <div className="text-muted-foreground flex gap-2 text-sm items-center py-4">
             <Eye size={16} />
             <span className="font-semibold">0</span> Watching
-          </div>
-          <div className="py-4 border-t border-border">
+          </div> */}
+          {/* <div className="py-4 border-t border-border">
             <h3 className="pb-3 flex items-center gap-2">
               <Tag size={16} />
               Tags
@@ -166,7 +170,7 @@ const Project = () => {
               <Badge>ロゴ</Badge>
               <Badge>イラスト</Badge>
             </div>
-          </div>
+          </div> */}
 
           {project?.project_member && project.project_member.length > 0 && (
             <div className="py-4 border-t border-border">
@@ -195,7 +199,7 @@ const Project = () => {
               <p className="text-sm py-2">
                 {project?.is_public ? "Public" : "Private"}
               </p>
-              {!project?.is_public && user && (
+              {user && (
                 <Button onClick={handlePublic} size={"sm"} variant={"ghost"}>
                   プロジェクトを
                   {project?.is_public ? "非公開にする" : "公開する"}
