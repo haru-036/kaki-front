@@ -19,3 +19,10 @@ export type User = {
   user_id: number;
   profile_image: string;
 };
+
+export type Comment = {
+  id: number;
+  content: string;
+  created_at: Date;
+  user: User;
+};

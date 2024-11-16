@@ -11,6 +11,7 @@ export type Commit = {
   commit_message: string;
   commit_image: string;
   created_at: Date;
+  created_user: number;
 };
 
 const groupByDate = (data: Commit[]): Record<string, Commit[]> => {
@@ -24,7 +25,7 @@ const groupByDate = (data: Commit[]): Record<string, Commit[]> => {
 
 const Commits = () => {
   const params = useParams();
-  const [commits, setCommits] = useState<Commit[] | null>(null);
+  // const [commits, setCommits] = useState<Commit[] | null>(null);
   const [groupedData, setGroupedData] = useState<Record<string, Commit[]>>({}); // グループ化されたデータの状態
 
   useEffect(() => {
@@ -42,7 +43,7 @@ const Commits = () => {
             : {}
         );
         const data = res.data;
-        setCommits(data.commits);
+        // setCommits(data.commits);
         const grouped = groupByDate(data.commits);
         setGroupedData(grouped);
         console.log(data, grouped);
@@ -60,7 +61,12 @@ const Commits = () => {
         Object.keys(groupedData).map((date) => (
           <CommitsWrapper key={date} date={date}>
             {groupedData[date].map((item) => (
-              <CommitCard key={item.id} commit={item} />
+              <CommitCard
+                key={item.id}
+                commit={item}
+                userId={String(params.username)}
+                projectId={String(params.projectId)}
+              />
             ))}
           </CommitsWrapper>
         ))

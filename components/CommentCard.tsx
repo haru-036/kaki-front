@@ -7,8 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
+import { Comment } from "@/types";
 
-const CommentCard = () => {
+const CommentCard = ({ comment }: { comment: Comment }) => {
+  const format = (newDate: Date) => {
+    const date = new Date(newDate);
+    const formatDate = date.toISOString().split("T")[1].substring(0, 8);
+    return formatDate;
+  };
+
   return (
     <div className="flex items-start gap-4">
       <Link href={`/user`}>
@@ -20,18 +27,13 @@ const CommentCard = () => {
       <Card className="w-full">
         <CardHeader className="bg-muted flex flex-row items-baseline gap-4 py-2 px-4">
           <CardTitle className="text-base">
-            <Link href={`/user`}>username</Link>
+            <Link href={`/user`}>{comment.user.username}</Link>
           </CardTitle>
           <CardDescription className="m-0">
-            commented 2 hours ago
+            commented {format(comment.created_at)}
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-4">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque
-          asperiores maxime possimus. Minima facilis dolor nam, reiciendis
-          eveniet assumenda voluptatem. Amet animi corrupti perspiciatis vero
-          debitis suscipit sunt aliquam obcaecati!
-        </CardContent>
+        <CardContent className="p-4">{comment.content}</CardContent>
       </Card>
     </div>
   );
