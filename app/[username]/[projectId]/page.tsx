@@ -83,17 +83,25 @@ const Project = () => {
         {user && (
           <div className="flex gap-3 items-center">
             <Button variant="outline" size="icon" asChild>
-              <Link href={`/1/1/settings`} className="[&_svg]:size-5">
+              <Link
+                href={`/${params.username}/${params.projectId}/settings`}
+                className="[&_svg]:size-5"
+              >
                 <Settings />
               </Link>
             </Button>
             <Button variant="outline" size="icon" asChild>
-              <Link href={`/1/projectId/addMember`} className="[&_svg]:size-5">
+              <Link
+                href={`/${params.username}/${params.projectId}/addMember`}
+                className="[&_svg]:size-5"
+              >
                 <Users />
               </Link>
             </Button>
             <Button asChild className="font-semibold" variant={"outline"}>
-              <Link href={"/1/projectId/addCommit"}>Add file</Link>
+              <Link href={`/${params.username}/${params.projectId}/addCommit`}>
+                Add file
+              </Link>
             </Button>
           </div>
         )}
@@ -118,7 +126,7 @@ const Project = () => {
               <p>8888</p>
               <p>1days ago</p>
               <Link
-                href={`/1/projectId/commits`}
+                href={`/${params.username}/${params.projectId}/commits`}
                 className="text-primary flex items-center gap-0.5 px-2 py-1 hover:bg-muted rounded"
               >
                 <History size={16} />3 commits
@@ -126,13 +134,13 @@ const Project = () => {
             </div>
           </div>
           <div className="w-full p-5 relative">
-            {/* {project && (
+            {project && (
               <img
-                src={`http://127.0.0.1:5000/${project.latest_commit_image}`}
+                src={`data:image/png;base64,${project.latest_commit_image}`}
                 alt="コミット画像"
-                className="w-full"
+                className="w-full block"
               />
-            )} */}
+            )}
             {/* <div className="aspect-video bg-neutral-300 w-full rounded"></div> */}
           </div>
         </div>
