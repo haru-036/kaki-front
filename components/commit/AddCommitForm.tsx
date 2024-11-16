@@ -13,32 +13,48 @@ import {
 } from "@/components/ui/form";
 import AddCommitContent, { commitSchema } from "./AddCommitContent";
 import { Input } from "../ui/input";
+import { useContext, useEffect } from "react";
+import { AuthContext } from "../AuthProvider";
+import { useRouter } from "next/navigation";
 
 const AddCommitForm = () => {
+  const router = useRouter();
+  const { user } = useContext(AuthContext);
+
   const form = useForm<z.infer<typeof commitSchema>>({
     resolver: zodResolver(commitSchema),
     defaultValues: {
-      commitMessage: "",
-      commitImage: "",
+      commit_message: "",
+      commit_image: undefined,
     },
   });
+
+  useEffect(() => {
+    if (!user) {
+      router.replace("/login");
+      return;
+    }
+  }, [user, router]);
 
   function onSubmit(values: z.infer<typeof commitSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
   }
+
+  if (!user) return null;
+
   return (
     <div className="py-8 tracking-wide">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
-            name="commitImage"
+            name="commit_image"
             render={() => (
               <FormItem>
                 <AddCommitContent
-                  setFormValue={(img) => form.setValue("commitImage", img)}
+                  setFormValue={(img) => form.setValue("commit_image", img)}
                 />
                 <FormMessage />
               </FormItem>
@@ -47,7 +63,7 @@ const AddCommitForm = () => {
 
           <FormField
             control={form.control}
-            name="commitMessage"
+            name="commit_message"
             render={({ field }) => (
               <FormItem className="pt-6">
                 <FormLabel>コミットメッセージ</FormLabel>
