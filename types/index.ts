@@ -5,6 +5,9 @@ export type Project = {
   latest_commit_image: string;
   description: string;
   created_at: Date;
+  latest_commit_message: string;
+  commit_count: number;
+  project_member: [];
 };
 
 export type Notification = {
@@ -18,4 +21,11 @@ export type User = {
   username: string;
   user_id: number;
   profile_image: string;
+};
+
+export type Comment = {
+  id: number;
+  content: string;
+  created_at: Date;
+  user: User;
 };

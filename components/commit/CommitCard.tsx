@@ -9,7 +9,15 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Commit } from "@/app/[username]/[projectId]/commits/page";
 
-const CommitCard = ({ commit }: { commit: Commit }) => {
+const CommitCard = ({
+  commit,
+  userId,
+  projectId,
+}: {
+  commit: Commit;
+  userId: string;
+  projectId: string;
+}) => {
   const format = (newDate: Date) => {
     const date = new Date(newDate);
     const formatDate = date.toISOString().split("T")[1].substring(0, 8);
@@ -22,7 +30,7 @@ const CommitCard = ({ commit }: { commit: Commit }) => {
         <CardHeader className="p-4">
           <CardTitle className="text-base md:text-lg font-semibold">
             <Link
-              href={"/username/project/commits/commitId"}
+              href={`/${userId}/${projectId}/commits/${commit.id}`}
               className="h-fit hover:underline"
             >
               {commit.commit_message}
