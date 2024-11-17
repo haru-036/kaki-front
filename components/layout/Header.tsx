@@ -25,7 +25,7 @@ const Header = () => {
         {/* 一意のユーザー名をリンクにする */}
         {user ? (
           <div className="flex items-center gap-6">
-            <NotificationPopover />
+            {/* <NotificationPopover /> */}
             <Link href={`/${user.user_id}`}>
               <UserIcon username={user.username} src={user.profile_image} />
             </Link>
