@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import UserIcon from "@/components/UserIcon";
 import api from "@/lib/axios";
 import { getToken } from "@/lib/token";
-import { Project, User } from "@/types";
+import { Project } from "@/types";
 import { BookMarked, Pencil } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
