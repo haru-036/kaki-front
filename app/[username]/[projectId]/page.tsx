@@ -5,7 +5,7 @@ import UserIcon from "@/components/UserIcon";
 import api from "@/lib/axios";
 import { getToken } from "@/lib/token";
 import { User } from "@/types";
-import { History, Settings, Users } from "lucide-react";
+import { History, Settings, Star, Users } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
@@ -28,6 +28,7 @@ type ProjectData = {
   project_member: User[];
   commit_count: number;
   project_star_count: number;
+  star_entry: boolean;
 };
 
 const Project = () => {
@@ -91,6 +92,29 @@ const Project = () => {
   };
   if (!project) return;
 
+  const handleStar = async () => {
+    try {
+      const token = getToken();
+      if (!token) return;
+      const res = await api.patch(
+        `/project/${project.project_id}`,
+        {
+          action: "toggle_star",
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      const data = res.data;
+      console.log(data);
+      setRefreshKey(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const format = (newDate: Date) => {
     const date = new Date(newDate);
     const formatDate = date.toISOString().split("T")[0];
@@ -106,29 +130,42 @@ const Project = () => {
     <div className="container mx-auto py-10 px-6 md:px-8 max-w-screen-xl">
       <div className="flex justify-between items-center">
         <h2 className="font-semibold text-xl">{project.name}</h2>
-        {user && canView && (
-          <div className="flex gap-3 items-center">
-            <Button variant="outline" size="icon" asChild>
-              <Link
-                href={`/${params.username}/${params.projectId}/settings`}
-                className="[&_svg]:size-5"
-              >
-                <Settings />
-              </Link>
+        {user && (
+          <div className="flex items-center gap-3">
+            <Button
+              variant={project.star_entry ? "secondary" : "outline"}
+              onClick={handleStar}
+            >
+              <Star fill={project.star_entry ? "white" : ""} size={16} />
+              {project.star_entry ? "Starred" : "Star"}
             </Button>
-            <Button variant="outline" size="icon" asChild>
-              <Link
-                href={`/${params.username}/${params.projectId}/addMember`}
-                className="[&_svg]:size-5"
-              >
-                <Users />
-              </Link>
-            </Button>
-            <Button asChild className="font-semibold" variant={"outline"}>
-              <Link href={`/${params.username}/${params.projectId}/addCommit`}>
-                Add file
-              </Link>
-            </Button>
+            {canView && (
+              <div className="flex gap-3 items-center">
+                <Button variant="outline" size="icon" asChild>
+                  <Link
+                    href={`/${params.username}/${params.projectId}/settings`}
+                    className="[&_svg]:size-5"
+                  >
+                    <Settings />
+                  </Link>
+                </Button>
+                <Button variant="outline" size="icon" asChild>
+                  <Link
+                    href={`/${params.username}/${params.projectId}/addMember`}
+                    className="[&_svg]:size-5"
+                  >
+                    <Users />
+                  </Link>
+                </Button>
+                <Button asChild className="font-semibold" variant={"outline"}>
+                  <Link
+                    href={`/${params.username}/${params.projectId}/addCommit`}
+                  >
+                    Add file
+                  </Link>
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -186,10 +223,11 @@ const Project = () => {
             <h3 className="font-semibold py-5 leading-snug">About</h3>
             <p className="leading-relaxed pb-4">{project?.description}</p>
           </div>
-          {/* <div className="text-muted-foreground flex gap-2 text-sm items-center py-4">
-            <Eye size={16} />
-            <span className="font-semibold">0</span> Watching
-          </div> */}
+          <div className="text-muted-foreground flex gap-2 text-sm items-center py-4">
+            <Star size={16} />
+            <span className="font-semibold">{project.project_star_count}</span>
+            stars
+          </div>
           {/* <div className="py-4 border-t border-border">
             <h3 className="pb-3 flex items-center gap-2">
               <Tag size={16} />

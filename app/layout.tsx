@@ -4,8 +4,8 @@ import Header from "@/components/layout/Header";
 import ContextProvider from "@/components/layout/ContextProvider";
 
 export const metadata: Metadata = {
-  title: "イラスト版 GitHub",
-  description: "",
+  title: "ArtHub",
+  description: "GitHubのようにイラストをオンラインで共有・管理",
 };
 
 export default function RootLayout({
