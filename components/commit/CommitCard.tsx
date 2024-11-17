@@ -59,11 +59,11 @@ const CommitCard = ({
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-0 px-4 pb-4 md:p-4">
-          <Link href={`/username/projectId/commits/commitId`}>
+          <Link href={`/${userId}/${projectId}/commits/${commit.id}`}>
             <img
               src={`data:image/png;base64,${commit.commit_image}`}
               alt="コミット画像"
-              className="w-full md:w-72 md:max-h-40 object-contain object-right block rounded-md"
+              className="w-full md:max-h-40 object-contain object-right block rounded-md"
             />
           </Link>
         </CardContent>

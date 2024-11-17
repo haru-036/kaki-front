@@ -149,14 +149,16 @@ const Project = () => {
                     <Settings />
                   </Link>
                 </Button>
-                <Button variant="outline" size="icon" asChild>
-                  <Link
-                    href={`/${params.username}/${params.projectId}/addMember`}
-                    className="[&_svg]:size-5"
-                  >
-                    <Users />
-                  </Link>
-                </Button>
+                {project.created_user_id === user.user_id && (
+                  <Button variant="outline" size="icon" asChild>
+                    <Link
+                      href={`/${params.username}/${params.projectId}/addMember`}
+                      className="[&_svg]:size-5"
+                    >
+                      <Users />
+                    </Link>
+                  </Button>
+                )}
                 <Button asChild className="font-semibold" variant={"outline"}>
                   <Link
                     href={`/${params.username}/${params.projectId}/addCommit`}

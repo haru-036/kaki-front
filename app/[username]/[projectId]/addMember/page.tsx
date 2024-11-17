@@ -22,6 +22,7 @@ const AddMember = () => {
   const { user } = useContext(AuthContext);
   const router = useRouter();
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
+  const [addMember, setAddMember] = useState<number[]>([]);
 
   useEffect(() => {
     if (!user) {
@@ -62,10 +63,15 @@ const AddMember = () => {
         }
       );
       const data = res.data;
+      setAddMember((prev) => [...prev, userId]);
       console.log(data);
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const invitemember = (id: number) => {
+    return addMember.some((member) => member === id); // メンバーに含まれているかどうか
   };
 
   return (
@@ -129,13 +135,19 @@ const AddMember = () => {
                   <UserIcon username={user.username} src={user.user_image} />
                   <p className="text-lg">{user.username}</p>
                 </div>
-                <Button
-                  className="mx-4"
-                  size={"sm"}
-                  onClick={() => handleAddMember(user.id)}
-                >
-                  追加
-                </Button>
+                {invitemember(user.id) ? (
+                  <Button className="mx-4" size={"sm"} disabled>
+                    招待済み
+                  </Button>
+                ) : (
+                  <Button
+                    className="mx-4"
+                    size={"sm"}
+                    onClick={() => handleAddMember(user.id)}
+                  >
+                    追加
+                  </Button>
+                )}
               </div>
             ))}
           </div>

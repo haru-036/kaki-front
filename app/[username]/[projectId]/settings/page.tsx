@@ -1,13 +1,31 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import api from "@/lib/axios";
+import { getToken } from "@/lib/token";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 const Settings = () => {
   const params = useParams();
+  const router = useRouter();
   if (!params.username || !params.projectId) return;
 
-  const handleDelete = async () => {};
+  const handleDelete = async () => {
+    try {
+      const token = getToken();
+      if (!token) return;
+      const res = await api.delete(`/project/${params.projectId}`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+      const data = res.data;
+      console.log(data);
+      router.push(`/`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="container mx-auto py-10 px-8 max-w-screen-md">
