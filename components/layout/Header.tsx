@@ -2,7 +2,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import NotificationPopover from "../NotificationPopover";
 import { useContext } from "react";
 import { AuthContext } from "../AuthProvider";
 import UserIcon from "../UserIcon";
