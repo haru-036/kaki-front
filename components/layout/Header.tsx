@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import NotificationPopover from "../NotificationPopover";
 import { useContext } from "react";
 import { AuthContext } from "../AuthProvider";
+import UserIcon from "../UserIcon";
 
 const Header = () => {
   const { user } = useContext(AuthContext);
@@ -26,10 +27,7 @@ const Header = () => {
           <div className="flex items-center gap-6">
             <NotificationPopover />
             <Link href={`/${user.user_id}`}>
-              <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>{user.username.slice(0, 2)}</AvatarFallback>
-              </Avatar>
+              <UserIcon username={user.username} src={user.profile_image} />
             </Link>
           </div>
         ) : (

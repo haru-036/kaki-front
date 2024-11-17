@@ -6,8 +6,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Commit } from "@/app/[username]/[projectId]/commits/page";
+import UserIcon from "../UserIcon";
 
 const CommitCard = ({
   commit,
@@ -20,7 +20,7 @@ const CommitCard = ({
 }) => {
   const format = (newDate: Date) => {
     const date = new Date(newDate);
-    const formatDate = date.toISOString().split("T")[1].substring(0, 8);
+    const formatDate = date.toISOString().split("T")[1].substring(0, 5);
     return formatDate;
   };
 
@@ -38,13 +38,17 @@ const CommitCard = ({
           </CardTitle>
           <CardDescription className="flex flex-col justify-between h-full">
             <div className="flex gap-2 items-center">
-              <Link href={`/1`} className="flex gap-2 items-center">
-                <Avatar className="w-5 h-5">
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
+              <Link
+                href={`/${commit.created_user_id}`}
+                className="flex gap-2 items-center"
+              >
+                <UserIcon
+                  username={commit.created_username}
+                  src={commit.created_user_profile_image}
+                  className="w-5 h-5"
+                />
                 <p className="text-xs text-muted-foreground hover:underline">
-                  username
+                  {commit.created_username}
                 </p>
               </Link>
               <div className="text-xs text-muted-foreground">

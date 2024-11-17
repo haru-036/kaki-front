@@ -1,7 +1,7 @@
 "use client";
 import { AuthContext } from "@/components/AuthProvider";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import UserIcon from "@/components/UserIcon";
 import api from "@/lib/axios";
 import { getToken } from "@/lib/token";
 import { User } from "@/types";
@@ -17,7 +17,14 @@ type ProjectData = {
   is_public: boolean;
   latest_commit_image: string;
   latest_commit_message: string;
-  created_user: number;
+  latest_commit_user_id: number;
+  latest_commit_username: string;
+  latest_commit_user_profile_image: string;
+  latest_commit_created_at: Date;
+  latest_commit_id: number;
+  created_user_id: number;
+  created_username: string;
+  created_user_profile_image: string;
   project_member: User[];
   commit_count: number;
   project_star_count: number;
@@ -27,9 +34,11 @@ const Project = () => {
   const params = useParams();
   const [project, setProject] = useState<ProjectData>();
   const { user } = useContext(AuthContext);
+  const [refreshKey, setRefreshKey] = useState(true);
 
   useEffect(() => {
     (async () => {
+      if (!refreshKey) return;
       try {
         const token = getToken();
         const res = await api.get(
@@ -46,9 +55,11 @@ const Project = () => {
         setProject(res.data);
       } catch (error) {
         console.error(error);
+      } finally {
+        setRefreshKey(false);
       }
     })();
-  }, [params]);
+  }, [params, refreshKey]);
 
   const handlePublic = async () => {
     if (!params.username || !params.projectId) return;
@@ -71,20 +82,31 @@ const Project = () => {
           }
         );
         const data = await res.data;
-        setProject(data);
+        setRefreshKey(true);
         console.log(data);
       } catch (error) {
         console.error(error);
       }
     }
   };
+  if (!project) return;
+
+  const format = (newDate: Date) => {
+    const date = new Date(newDate);
+    const formatDate = date.toISOString().split("T")[0];
+    const formatTime = date.toISOString().split("T")[1].substring(0, 5);
+    return `${formatDate} ${formatTime}`;
+  };
+
+  const canView =
+    user?.user_id === project.created_user_id ||
+    project.project_member.some((member) => member.user_id === user?.user_id); // メンバーに含まれているかどうか
 
   return (
     <div className="container mx-auto py-10 px-6 md:px-8 max-w-screen-xl">
       <div className="flex justify-between items-center">
-        <h2 className="font-semibold text-xl">{project?.name}</h2>
-        {/* TODO: メンバーにも表示するようにする */}
-        {user && (
+        <h2 className="font-semibold text-xl">{project.name}</h2>
+        {user && canView && (
           <div className="flex gap-3 items-center">
             <Button variant="outline" size="icon" asChild>
               <Link
@@ -116,19 +138,29 @@ const Project = () => {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white bg-opacity-5 py-3 px-3 border-b border-input">
             <div className="flex gap-2 items-center">
               <Button asChild variant={"link"} size={"sm"} className="px-2">
-                <Link href={"/1"}>
-                  <Avatar className="w-5 h-5">
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                  <p className="font-semibold text-sm">username</p>
+                <Link href={`/${project.latest_commit_user_id}`}>
+                  <UserIcon
+                    username={project.latest_commit_username}
+                    src={project.latest_commit_user_profile_image}
+                    className="w-5 h-5"
+                  />
+                  <p className="font-semibold text-sm">
+                    {project.latest_commit_username}
+                  </p>
                 </Link>
               </Button>
-              <p className="text-sm">{project?.latest_commit_message}</p>
+              <Link
+                href={`/${project.created_user_id}/${project.project_id}/commits/${project.latest_commit_id}`}
+                className="text-sm hover:text-blue-400"
+              >
+                {project.latest_commit_message}
+              </Link>
             </div>
             <div className="text-sm text-muted-foreground flex gap-4 items-center px-2 md:px-0">
-              <p>8888</p>
-              <p>1days ago</p>
+              <p>
+                {project.latest_commit_created_at &&
+                  format(project.latest_commit_created_at)}
+              </p>
               <Link
                 href={`/${params.username}/${params.projectId}/commits`}
                 className="text-primary flex items-center gap-0.5 px-2 py-1 hover:bg-muted rounded"
@@ -181,12 +213,10 @@ const Project = () => {
               <div className="flex gap-3 flex-wrap">
                 {project?.project_member.map((member) => (
                   <Link href={`/${member.user_id}`} key={member.user_id}>
-                    <Avatar>
-                      <AvatarImage src={member.profile_image} />
-                      <AvatarFallback>
-                        {member.username.slice(0, 2)}
-                      </AvatarFallback>
-                    </Avatar>
+                    <UserIcon
+                      username={member.username}
+                      src={member.profile_image}
+                    />
                   </Link>
                 ))}
               </div>
@@ -199,7 +229,7 @@ const Project = () => {
               <p className="text-sm py-2">
                 {project?.is_public ? "Public" : "Private"}
               </p>
-              {user && (
+              {project && user && user.user_id === project.created_user_id && (
                 <Button onClick={handlePublic} size={"sm"} variant={"ghost"}>
                   プロジェクトを
                   {project?.is_public ? "非公開にする" : "公開する"}
