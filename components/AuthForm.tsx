@@ -13,14 +13,14 @@ import {
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import Link from "next/link";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { AlertCircle, Eye, EyeClosed } from "lucide-react";
 import api from "@/lib/axios";
 import { useRouter } from "next/navigation";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import axios from "axios";
 import { setToken } from "@/lib/token";
-// import { AuthContext } from "./AuthProvider";
+import { AuthContext } from "./AuthProvider";
 
 // 共通のベーススキーマ
 const baseSchema = z.object({
@@ -49,7 +49,7 @@ const AuthForm = ({ type }: { type: "login" | "signup" }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const rounter = useRouter();
-  // const { login } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
 
   // typeに応じてスキーマを選択
   const schema = type === "signup" ? signupSchema : baseSchema;
@@ -74,6 +74,7 @@ const AuthForm = ({ type }: { type: "login" | "signup" }) => {
       );
       console.log("POSTリクエストが成功しました", response.data);
       setToken(response.data.token);
+      login();
       rounter.push(`/`);
     } catch (error) {
       console.error("POSTリクエストが失敗しました", error);

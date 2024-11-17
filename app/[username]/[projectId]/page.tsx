@@ -34,9 +34,11 @@ const Project = () => {
   const params = useParams();
   const [project, setProject] = useState<ProjectData>();
   const { user } = useContext(AuthContext);
+  const [refreshKey, setRefreshKey] = useState(true);
 
   useEffect(() => {
     (async () => {
+      if (!refreshKey) return;
       try {
         const token = getToken();
         const res = await api.get(
@@ -53,9 +55,11 @@ const Project = () => {
         setProject(res.data);
       } catch (error) {
         console.error(error);
+      } finally {
+        setRefreshKey(false);
       }
     })();
-  }, [params]);
+  }, [params, refreshKey]);
 
   const handlePublic = async () => {
     if (!params.username || !params.projectId) return;
@@ -78,12 +82,14 @@ const Project = () => {
           }
         );
         const data = await res.data;
+        setRefreshKey(true);
         console.log(data);
       } catch (error) {
         console.error(error);
       }
     }
   };
+  if (!project) return;
 
   const format = (newDate: Date) => {
     const date = new Date(newDate);
@@ -92,13 +98,15 @@ const Project = () => {
     return `${formatDate} ${formatTime}`;
   };
 
-  if (!project) return;
+  const canView =
+    user?.user_id === project.created_user_id ||
+    project.project_member.some((member) => member.user_id === user?.user_id); // メンバーに含まれているかどうか
+
   return (
     <div className="container mx-auto py-10 px-6 md:px-8 max-w-screen-xl">
       <div className="flex justify-between items-center">
         <h2 className="font-semibold text-xl">{project.name}</h2>
-        {/* TODO: メンバーにも表示するようにする */}
-        {user && user.user_id === project.created_user_id && (
+        {user && canView && (
           <div className="flex gap-3 items-center">
             <Button variant="outline" size="icon" asChild>
               <Link

@@ -11,7 +11,9 @@ export type Commit = {
   commit_message: string;
   commit_image: string;
   created_at: Date;
-  created_user: number;
+  created_user_id: number;
+  created_username: string;
+  created_user_profile_image: string;
 };
 
 const groupByDate = (data: Commit[]): Record<string, Commit[]> => {

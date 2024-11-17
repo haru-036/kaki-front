@@ -7,12 +7,14 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 
 interface AuthContextType {
   user: User | null;
+  login: () => void;
   logout: () => void;
   updateUser: (userData: React.SetStateAction<User | null>) => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
+  login: () => {},
   logout: () => {},
   updateUser: () => {},
 });
@@ -24,6 +26,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     (async () => {
+      if (!isLoading) return;
       try {
         const token = getToken();
         if (!token) {
@@ -50,7 +53,11 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         setIsLoading(false);
       }
     })();
-  }, []);
+  }, [isLoading]);
+
+  const login = () => {
+    setIsLoading(true);
+  };
 
   const updateUser = (userData: React.SetStateAction<User | null>) => {
     setUser(userData);
@@ -69,7 +76,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, updateUser, logout }}>
+    <AuthContext.Provider value={{ user, updateUser, logout, login }}>
       {children}
     </AuthContext.Provider>
   );
