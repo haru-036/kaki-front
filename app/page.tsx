@@ -86,11 +86,9 @@ export default function Home() {
               </div>
             </div>
             {data &&
-              [...data.projects]
-                .reverse()
-                .map((project) => (
-                  <ProjectCard user={true} project={project} key={project.id} />
-                ))}
+              [...data.projects].map((project) => (
+                <ProjectCard user={true} project={project} key={project.id} />
+              ))}
           </div>
           {data?.user_id && (
             <div className="font-semibold text-xl space-y-4 md:col-span-1">

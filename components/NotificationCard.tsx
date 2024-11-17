@@ -6,6 +6,7 @@ import UserIcon from "./UserIcon";
 import { getToken } from "@/lib/token";
 import api from "@/lib/axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const NotificationCard = ({
   small,
@@ -14,6 +15,7 @@ const NotificationCard = ({
   small?: boolean;
   notification: Notification;
 }) => {
+  const router = useRouter();
   const handleNotificationResponse = async (response: string) => {
     try {
       const token = getToken();
@@ -26,6 +28,9 @@ const NotificationCard = ({
         }
       );
       console.log(res.data);
+      router.push(
+        `/${notification.from_user}/${notification.project.project_id}`
+      );
     } catch (error) {
       console.error(error);
     }
@@ -70,7 +75,12 @@ const NotificationCard = ({
           >
             {notification.project.name}
           </Link>
-          に{notification.type === "invite" ? "招待されました" : "コメント"}
+          に
+          {notification.type === "invite"
+            ? "招待されました"
+            : notification.type === "commit"
+            ? "新しいコミット"
+            : "コメント"}
         </p>
       </CardHeader>
       <CardContent>

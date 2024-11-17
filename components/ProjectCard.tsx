@@ -1,7 +1,6 @@
 import {
   Card,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -16,13 +15,6 @@ const ProjectCard = ({
   user: boolean;
   project: Project;
 }) => {
-  const format = (newDate: Date) => {
-    const date = new Date(newDate);
-    const formatDate = date.toISOString().split("T")[0];
-    const formatTime = date.toISOString().split("T")[1].substring(0, 5);
-    return `${formatDate} ${formatTime}`;
-  };
-
   return (
     <Link href={`/${project.created_user_id}/${project.id}`} className="h-fit">
       <Card className="hover:bg-secondary flex justify-between gap-0 flex-wrap">
@@ -42,11 +34,11 @@ const ProjectCard = ({
             <CardDescription>{project.description}</CardDescription>
           </CardHeader>
           {/* タグを入れるならBadgeを使う <CardContent>タグ</CardContent> */}
-          <CardFooter>
+          {/* <CardFooter>
             <div className="text-xs text-muted-foreground">
               created at {project.created_at && format(project.created_at)}
             </div>
-          </CardFooter>
+          </CardFooter> */}
         </div>
         <div className="p-4">
           <img
