@@ -182,7 +182,7 @@ const Profile = () => {
                 </Button>
               )}
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               {[...data.projects].reverse().map((project) => (
                 <ProjectCard user={false} project={project} key={project.id} />
               ))}
