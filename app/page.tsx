@@ -77,7 +77,8 @@ export default function Home() {
                   size={"sm"}
                   className="text-muted-foreground"
                   onClick={() => {
-                    setSearchInput(""), fetchContent();
+                    setSearchInput("");
+                    fetchContent();
                   }}
                 >
                   クリア
